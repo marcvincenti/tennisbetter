@@ -9,6 +9,11 @@
   []
   (.replaceAll (.toString (java.util.UUID/randomUUID)) "-" ""))
 
+(defn ^:private is-token-real?
+  "Return a boolean"
+  [tok]
+  (some #(= tok %) @tokens))
+
 (defn login
   "Check if user have the password and return a token"
   [{:keys [password]}]
@@ -27,6 +32,14 @@
 (defn test-token
   "Check if user is connected"
   [{:keys [token]}]
-  (if (some #(= token %) @tokens)
+  (if (is-token-real? token)
     (response {:token token})
+    (status (response "Invalid token") 500)))
+
+
+(defn if-logged
+  "execute function only if a valid token is provided"
+  [f {:keys [token] :as params}]
+  (if (is-token-real? token)
+    (f params)
     (status (response "Invalid token") 500)))

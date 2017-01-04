@@ -9,7 +9,9 @@ lein ring server-headless
 
 ## Notes
 
-* The date format is wrong for the end of 2016
+* PATCH -> date format is wrong for the end of 2016
+* TODO -> Crawl Bets on (at least) one website
+* TODO -> Crawl Pts/Rank for players
 
 ## Description
 

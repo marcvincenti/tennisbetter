@@ -12,7 +12,8 @@
   (POST "/login" {params :params} (auth/login params))
   (POST "/logout" {params :params} (auth/logout params))
   (GET "/test-token" {params :params} (auth/test-token params))
-  (GET "/players" [] (players/get)))
+  (GET "/players" {params :params} (auth/if-logged players/get! params))
+  (GET "/prediction" {params :params} (auth/if-logged players/predict params)))
 
 (defroutes app
   (GET  "/" [] (resource-response "index.html" {:root "public"}))

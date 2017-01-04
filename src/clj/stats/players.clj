@@ -28,7 +28,12 @@
   []
   (run! read-csv matches-files))
 
-(defn get
+(defn get!
   "Return a list of all the Players"
-  []
+  [& args]
   (response {:players (keys @players)}))
+
+(defn predict
+  "Return a multiplier to bet the match"
+  [{:keys []}]
+  (response {:prediction (rand)}))
