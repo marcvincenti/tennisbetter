@@ -1,54 +1,49 @@
 (ns pages.predictions
   (:require [reagent.core :as r]
+            [providers.data :as data]
+            [components.datepicker :as dt]
             [app.state :refer [app-state]]))
-
-(defn ^:private add-project-modal []
-  (let [p-name (r/atom "")
-        p-descr (r/atom "")]
-    (fn []
-  [:div
-    [:div {:class "modal fade" :id "addProjModal" :tabIndex "-1" :role "dialog"
-           :aria-labelledby "addProjectModalLabel"}
-      [:div {:class "modal-dialog" :role "document"}
-        [:div {:class "modal-content"}
-          [:div {:class "modal-header"}
-            [:button {:type "button" :class "close"
-                      :data-dismiss "modal" :aria-label "Close"}
-              [:span {:aria-hidden "true"} "x"]]
-            [:h4 {:class "modal-title" :id "addProjectModalLabel"}
-              "Create a new project"]]
-          [:div {:class "modal-body"}
-            [:div {:class "form-horizontal"}
-              [:div {:class "form-group"}
-                [:label {:class "control-label col-sm-3" :for "nameInput"}
-                  "Project name*"]
-                [:div {:class "col-sm-9"}
-                  [:input {:type "text" :class "form-control"
-                           :on-change #(reset! p-name (-> % .-target .-value))
-                           :value @p-name :id "nameInput"
-                           :placeholder "Project name"}]]]
-             [:div {:class "form-group"}
-               [:label {:class "control-label col-sm-3" :for "descrInput"}
-                 "Description"]
-               [:div {:class "col-sm-9"}
-                 [:input {:type "text" :class "form-control"
-                          :on-change #(reset! p-descr (-> % .-target .-value))
-                          :value @p-descr :id "descrInput"
-                          :placeholder "Project description"}]]]]]
-          [:div {:class "modal-footer"}
-            [:button {:type "button" :class "btn btn-default"
-                      :data-dismiss "modal"} "Close"]
-            [:button {:type "button" :class "btn btn-primary"
-                      :data-dismiss "modal"
-                      :on-click #(do nil)}
-              "Create"]]]]]
-    [:button {:type "button" :class "btn btn-primary"
-              :data-toggle "modal" :data-target "#addProjModal"}
-      "New Simulation"]])))
 
 (defn component []
   (let [refreshing (r/atom false)]
+    (when empty? (get @app-state :players) (data/load-players))
     (fn []
     [:div {:class "container"} [:h1 {:class "page-header"} "Make a bet ;)"]
-      [:div {:class "btn-toolbar" :role "toolbar"}
-        [add-project-modal]]])))
+
+      [:div {:class "panel panel-default"}
+        [:div {:class "panel-heading"} "Complete match profile"]
+        [:div {:class "panel-body"}
+
+          [:div {:class "form-group"}
+            [:label {:for "player1"} "Select a player"]
+            [:select {:class "form-control" :id "player1"}
+              (for [p (get @app-state :players)] ^{:key p} [:option p])]]
+          [:div {:class "form-group"}
+            [:label {:for "rank1"} "Rank"]
+            [:input {:class "form-control" :type "number" :id "rank1"}]]
+          [:div {:class "form-group"}
+            [:label {:for "points1"} "Points"]
+            [:input {:class "form-control" :type "number" :id "points1"}]]
+          [:div {:class "form-group"}
+            [:label {:for "odds1"} "Odds"]
+            [:input {:class "form-control" :type "number" :id "odds1"}]]
+
+          [:div {:class "form-group"}
+            [:label {:for "player2"} "Select opponent"]
+            [:select {:class "form-control" :id "player2"}
+              (for [p (get @app-state :players)] ^{:key p} [:option p])]]
+          [:div {:class "form-group"}
+            [:label {:for "rank2"} "Rank"]
+            [:input {:class "form-control" :type "number" :id "rank2"}]]
+          [:div {:class "form-group"}
+            [:label {:for "points2"} "Points"]
+            [:input {:class "form-control" :type "number" :id "points2"}]]
+          [:div {:class "form-group"}
+            [:label {:for "odds2"} "Odds"]
+            [:input {:class "form-control" :type "number" :id "odds2"}]]
+
+          [:div {:class "form-group"}
+            [:label {:for "date"} "Date"]
+            [dt/datepicker]]
+
+        ]]])))

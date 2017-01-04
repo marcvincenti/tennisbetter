@@ -7,6 +7,10 @@ lein cljsbuild [auto|once] [dev|prod]
 lein ring server-headless
 ```
 
+## Notes
+
+* The date format is wrong for the end of 2016
+
 ## Description
 
 This project aim to teach us machine learning, data science and web development.  

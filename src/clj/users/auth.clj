@@ -1,10 +1,10 @@
-(ns server.auth
+(ns users.auth
   (:require [ring.util.response :refer [response status]]))
 
-(def secret-pass "test")  ;passphrase to avoid getting too many users
-(def tokens (atom '()))   ;list of tokens in use
+(def ^:private secret-pass "test")  ;passphrase to avoid getting too many users
+(def ^:private tokens (atom '()))   ;list of tokens in use
 
-(defn token
+(defn ^:private token
   "Generate a token (string)"
   []
   (.replaceAll (.toString (java.util.UUID/randomUUID)) "-" ""))
