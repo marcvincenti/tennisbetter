@@ -10,10 +10,10 @@
   "Return a prediction"
   [isLoading isError]
   (reset! isLoading true)
-  (go (let [token (get @app-state :session)
+  (go (let [params (merge {:token (:session @app-state)} (:form-p @app-state))
             response (<! (http/get "/api/prediction"
-                          {:query-params {:token token}}))]
-    (if (get response :success)
-      (.log js/console "YOUPII!")
+                          {:query-params params}))]
+    (if (:success response)
+      (.log js/console (get-in response [:body :prediction]))
       (reset! isError true))
     (reset! isLoading false))))

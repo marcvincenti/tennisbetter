@@ -11,6 +11,7 @@
                  [secretary "1.2.3"]            ;router for cljs
                  [ring/ring-json "0.5.0-beta1"] ;ring server
                  [org.clojure/data.csv "0.1.3"] ;read csv
+                 [clj-time "0.13.0"]            ;handle dates
                  [amazonica "0.3.79"]]          ;aws java sdk clj wrapper
   :plugins [[lein-ring "0.9.7"]
             [lein-cljsbuild "1.1.4"]]
