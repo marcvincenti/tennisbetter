@@ -3,6 +3,7 @@
             [compojure.route :refer [not-found resources]]
             [ring.util.response :refer [resource-response]]
             [stats.players :as players]
+            [stats.predictions :as preds]
             [users.auth :as auth]))
 
 (defn ^:private four-oh-four-page []
@@ -13,7 +14,7 @@
   (POST "/logout" {params :params} (auth/logout params))
   (GET "/test-token" {params :params} (auth/test-token params))
   (GET "/players" {params :params} (auth/if-logged players/get! params))
-  (GET "/prediction" {params :params} (auth/if-logged players/predict params)))
+  (GET "/prediction" {params :params} (auth/if-logged preds/predict params)))
 
 (defroutes app
   (GET  "/" [] (resource-response "index.html" {:root "public"}))
