@@ -21,7 +21,7 @@
                                                         :surface surface
                                                         :win true
                                                         :opponent looser})
-      (swap! players update-in [(keyword winner)] conj {:date  date
+      (swap! players update-in [(keyword looser)] conj {:date  date
                                                         :surface surface
                                                         :win false
                                                         :opponent winner}))))

@@ -28,7 +28,7 @@
         (swap! loose-surface inc)))))
 
 (defn ^:private opponent-model-inc
-  [matches player-list surface win-all win-surface loose-all loose-surface]
+  [matches player-list surface win-all loose-all win-surface loose-surface]
   (run!
     (fn [m] (when (contains? player-list (:opponent m))
       (match-inc m surface win-all loose-all win-surface loose-surface)))
@@ -52,16 +52,16 @@
         p1-p2-opps (intersection p1-opponents p2-opponents)]
     (do
       (opponent-model-inc p1-matches p1-p2-opps surface
-        p1-win-all-surfaces p1-win-this-surface
-        p1-loose-all-surfaces p1-loose-this-surface)
+        p1-win-all-surfaces p1-loose-all-surfaces
+        p1-win-this-surface p1-loose-this-surface)
       (opponent-model-inc p2-matches p1-p2-opps surface
-        p2-win-all-surfaces p2-win-this-surface
-        p2-loose-all-surfaces p2-loose-this-surface)
+        p2-win-all-surfaces p2-loose-all-surfaces
+        p2-win-this-surface p2-loose-this-surface)
       (let [diff-all (- (ratio @p1-win-all-surfaces @p1-loose-all-surfaces)
                       (ratio @p2-win-all-surfaces @p2-loose-all-surfaces))
             diff-surface (- (ratio @p1-win-this-surface @p1-loose-this-surface)
                           (ratio @p2-win-this-surface @p2-loose-this-surface))]
-        (prn "opponent" [diff-all diff-surface])))))
+        [diff-all diff-surface]))))
 
 (defn ^:private historical-model-inc
  [matches surface date win-all-6 loose-all-6 win-all-12 loose-all-12
@@ -128,19 +128,14 @@
                   (ratio @p2-win-surface-12months  @p2-loose-surface-12months))
       diff-s-18 (- (ratio @p1-win-surface-18months  @p1-loose-surface-18months)
                   (ratio @p2-win-surface-18months  @p2-loose-surface-18months))]
-       (prn [@p1-win-all-6months  @p1-loose-all-6months @p2-win-all-6months  @p2-loose-all-6months
-       @p1-win-all-12months  @p1-loose-all-12months @p2-win-all-12months  @p2-loose-all-12months
-       @p1-win-all-18months  @p1-loose-all-18months @p2-win-all-18months  @p2-loose-all-18months
-       @p1-win-surface-6months  @p1-loose-surface-6months @p2-win-surface-6months  @p2-loose-surface-6months
-       @p1-win-surface-12months  @p1-loose-surface-12months @p2-win-surface-12months  @p2-loose-surface-12months
-       @p1-win-surface-18months  @p1-loose-surface-18months @p2-win-surface-18months  @p2-loose-surface-18months])))))
+       [diff-all-6 diff-all-12 diff-all-18 diff-s-6 diff-s-12 diff-s-18]))))
 
 (defn predict
   "Return a multiplier to bet the match"
   [{:keys [player1 player2 rank1 rank2 points1
            points2 odds1 odds2 surface date]}]
-  (concat [(- (util/str->int rank1) (util/str->int rank2))
+  (prn (concat [(- (util/str->int rank1) (util/str->int rank2))
                 (- (util/str->int points1) (util/str->int points2))]
                 (opponent-model player1 player2 surface)
-                (historical-model player1 player2 surface date))
+                (historical-model player1 player2 surface date)))
   (response {:prediction (rand)}))
