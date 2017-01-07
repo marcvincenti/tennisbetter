@@ -9,6 +9,7 @@
 
 (def ^:private date-formatter (f/formatter "dd/MM/yyyy"))
 (def ^:private ml-model-id (System/getenv "ML_MODEL_ID"))
+(def ^:private ml-model-endpoint (System/getenv "ML_MODEL_ENDPOINT"))
 
 (defn ^:private ratio
   "Return ratio between 2 int"
@@ -63,7 +64,7 @@
                       (ratio @p2-win-all-surfaces @p2-loose-all-surfaces))
             diff-surface (- (ratio @p1-win-this-surface @p1-loose-this-surface)
                           (ratio @p2-win-this-surface @p2-loose-this-surface))]
-        {:Var03 diff-all :Var04 diff-surface}))))
+        {"Var03" diff-all "Var04" diff-surface}))))
 
 (defn ^:private historical-model-inc
  [matches surface date win-all-6 loose-all-6 win-all-12 loose-all-12
@@ -130,16 +131,17 @@
                   (ratio @p2-win-surface-12months  @p2-loose-surface-12months))
       diff-s-18 (- (ratio @p1-win-surface-18months  @p1-loose-surface-18months)
                   (ratio @p2-win-surface-18months  @p2-loose-surface-18months))]
-       {:Var05 diff-all-6 :Var06 diff-all-12 :Var07 diff-all-18
-         :Var08 diff-s-6 :Var09 diff-s-12 :Var10 diff-s-18}))))
+       {"Var05" diff-all-6 "Var06" diff-all-12 "Var07" diff-all-18
+         "Var08" diff-s-6 "Var09" diff-s-12 "Var10" diff-s-18}))))
 
 (defn predict
   "Return a multiplier to bet the match"
   [{:keys [player1 player2 rank1 rank2 points1
            points2 odds1 odds2 surface date]}]
-  (let [records (merge {:Var01 (- (util/str->int rank1) (util/str->int rank2))
-                    :Var02 (- (util/str->int points1) (util/str->int points2))}
+  (let [records (merge {"Var01" (- (util/str->int rank1) (util/str->int rank2))
+                    "Var02" (- (util/str->int points1) (util/str->int points2))}
                     (opponent-model player1 player2 surface)
-                    (historical-model player1 player2 surface date))]
-    (prn (ml/predict {:ml-model-id ml-model-id :record records})))
-  (response {:prediction (rand)}))
+                    (historical-model player1 player2 surface date))
+        pred (ml/predict {:MLModelId ml-model-id :record records
+                          :predict-endpoint ml-model-endpoint})]
+    (response pred)))

@@ -12,8 +12,11 @@ lein ring server-headless
 Use environment variables :
 + AWS_ACCESS_KEY : your amazon access key
 + AWS_SECRET_ACCESS_KEY : your amazon secret key
-+ AWS_DEFAULT_REGION : the region for your model
 + ML_MODEL_ID : The model to request
++ ML_MODEL_ENDPOINT : The endpoint of your model
+
+The user must haev the following access :
+*AmazonMachineLearningRealTimePredictionOnlyAccess*
 
 ## Notes
 
