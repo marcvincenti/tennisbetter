@@ -7,6 +7,14 @@ lein cljsbuild [auto|once] [dev|prod]
 lein ring server-headless
 ```
 
+## Configuration
+
+Use environment variables :
++ AWS_ACCESS_KEY : your amazon access key
++ AWS_SECRET_ACCESS_KEY : your amazon secret key
++ AWS_DEFAULT_REGION : the region for your model
++ ML_MODEL_ID : The model to request
+
 ## Notes
 
 * PATCH -> date format is wrong for the end of 2016
