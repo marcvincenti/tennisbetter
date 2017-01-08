@@ -13,4 +13,6 @@
                           {:query-params {:token token}}))]
     (when (:success response)
       (swap! app-state assoc :players
-        (sort-by :id (get-in response [:body :players])))))))
+        (into (sorted-map)
+          (reduce #(assoc %1 (keyword (:id %2)) %2) {}
+            (get-in response [:body :players]))))))))

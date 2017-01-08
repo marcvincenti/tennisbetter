@@ -6,6 +6,15 @@
             [components.datepicker :as dt]
             [app.state :refer [app-state]]))
 
+(defn ^:private changePlayer
+  [player k-player k-rank k-points]
+  (swap! app-state assoc-in [:form-p k-player] player)
+  (let [p (get-in @app-state [:players (keyword player)])]
+    (when (:points p)
+      (swap! app-state assoc-in [:form-p k-points] (:points p)))
+    (when (:rank p)
+      (swap! app-state assoc-in [:form-p k-rank] (:rank p)))))
+
 (defn component []
   (let [loading? (r/atom false)
         error? (r/atom false)]
@@ -22,11 +31,12 @@
             [:div {:class "form-group"}
               [:label {:for "player1"} "Select a player"]
               [:select {:class "form-control" :id "player1"
-                        :on-change #(swap! app-state assoc-in [:form-p :player1]
-                                    (-> % .-target .-value))
+                        :on-change #(changePlayer
+                          (-> % .-target .-value) :player1 :rank1 :points1)
                         :value (or (get-in @app-state [:form-p :player1]) "")}
                 [:option ""]
-                (for [p (get @app-state :players)] ^{:key p} [:option (:id p)])]]
+                (for [p (keys (get @app-state :players))] ^{:key p}
+                  [:option p])]]
             [:div {:class "form-group"}
               [:label {:for "rank1"} "Rank"]
               [:input {:class "form-control" :type "number" :id "rank1"
@@ -49,11 +59,12 @@
             [:div {:class "form-group"}
               [:label {:for "player2"} "Select opponent"]
               [:select {:class "form-control" :id "player2"
-                        :on-change #(swap! app-state assoc-in [:form-p :player2]
-                                    (-> % .-target .-value))
+                        :on-change #(changePlayer
+                          (-> % .-target .-value) :player2 :rank2 :points2)
                         :value (or (get-in @app-state [:form-p :player2]) "")}
                 [:option ""]
-                (for [p (get @app-state :players)] ^{:key p} [:option (:id p)])]]
+                (for [p (keys (get @app-state :players))] ^{:key p}
+                  [:option p])]]
             [:div {:class "form-group"}
               [:label {:for "rank2"} "Rank"]
               [:input {:class "form-control" :type "number" :id "rank2"
