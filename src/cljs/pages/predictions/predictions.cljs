@@ -26,7 +26,7 @@
                                     (-> % .-target .-value))
                         :value (or (get-in @app-state [:form-p :player1]) "")}
                 [:option ""]
-                (for [p (get @app-state :players)] ^{:key p} [:option p])]]
+                (for [p (get @app-state :players)] ^{:key p} [:option (:id p)])]]
             [:div {:class "form-group"}
               [:label {:for "rank1"} "Rank"]
               [:input {:class "form-control" :type "number" :id "rank1"
@@ -53,7 +53,7 @@
                                     (-> % .-target .-value))
                         :value (or (get-in @app-state [:form-p :player2]) "")}
                 [:option ""]
-                (for [p (get @app-state :players)] ^{:key p} [:option p])]]
+                (for [p (get @app-state :players)] ^{:key p} [:option (:id p)])]]
             [:div {:class "form-group"}
               [:label {:for "rank2"} "Rank"]
               [:input {:class "form-control" :type "number" :id "rank2"

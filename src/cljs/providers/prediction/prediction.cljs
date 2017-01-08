@@ -14,6 +14,8 @@
             response (<! (http/get "/api/prediction"
                           {:query-params params}))]
     (if (:success response)
-      (.log js/console (get-in response [:body :prediction]))
+      (let [label (get-in response [:body :prediction :predicted-label])
+            score (get-in response [:body :prediction :predicted-scores])]
+        (.log js/console (str label " => " score)))
       (reset! isError true))
     (reset! isLoading false))))

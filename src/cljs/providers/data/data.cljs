@@ -13,4 +13,4 @@
                           {:query-params {:token token}}))]
     (when (:success response)
       (swap! app-state assoc :players
-        (get-in response [:body :players]))))))
+        (sort-by :id (get-in response [:body :players])))))))

@@ -48,8 +48,8 @@
         p2-win-this-surface (atom 0)
         p2-loose-all-surfaces (atom 0)
         p2-loose-this-surface (atom 0)
-        p1-matches ((keyword player1) @players)
-        p2-matches ((keyword player2) @players)
+        p1-matches (:m ((keyword player1) @players))
+        p2-matches (:m ((keyword player2) @players))
         p1-opponents (reduce #(conj %1 (:opponent %2)) #{} p1-matches)
         p2-opponents (reduce #(conj %1 (:opponent %2)) #{} p2-matches)
         p1-p2-opps (intersection p1-opponents p2-opponents)]
@@ -102,8 +102,8 @@
        p2-win-surface-6months (atom 0) p2-loose-surface-6months (atom 0)
        p2-win-surface-12months (atom 0) p2-loose-surface-12months (atom 0)
        p2-win-surface-18months (atom 0) p2-loose-surface-18months (atom 0)
-       p1-matches ((keyword player1) @players)
-       p2-matches ((keyword player2) @players)]
+       p1-matches (:m ((keyword player1) @players))
+       p2-matches (:m ((keyword player2) @players))]
    (do
      (historical-model-inc p1-matches     surface   date
                            p1-win-all-6months       p1-loose-all-6months
@@ -144,4 +144,4 @@
                     (historical-model player1 player2 surface date))
         pred (ml/predict {:MLModelId ml-model-id :record records
                           :predict-endpoint ml-model-endpoint})]
-    (response pred)))
+    (response (select-keys pred [:prediction]))))
