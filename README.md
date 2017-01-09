@@ -7,6 +7,11 @@ lein cljsbuild [auto|once] [dev|prod]
 lein ring server-headless
 ```
 
+## Description
+
+This project aim to teach us machine learning, data science and web development.  
+The resulting application provide advices on how to bet on ATP & WTA players.
+
 ## Configuration
 
 Use environment variables :
@@ -20,14 +25,7 @@ The user must haev the following access :
 
 ## Notes
 
-* PATCH -> date format is wrong for the end of 2016
 * TODO -> Crawl Bets on (at least) one website
-* TODO -> Crawl Pts/Rank for players
-
-## Description
-
-This project aim to teach us machine learning, data science and web development.  
-The resulting application provide advices on how to bet on ATP & WTA players.
 
 ## Requirements
 

@@ -143,5 +143,12 @@
                     (opponent-model player1 player2 surface)
                     (historical-model player1 player2 surface date))
         pred (ml/predict {:MLModelId ml-model-id :record records
-                          :predict-endpoint ml-model-endpoint})]
-    (response (select-keys pred [:prediction]))))
+                          :predict-endpoint ml-model-endpoint})
+        static-amount 20
+        score-model (first (vals (get-in pred [:prediction :predicted-scores])))
+        oddJ1 (util/str->float odds1)
+        oddJ2 (util/str->float odds2)
+        score-market (ratio oddJ2 oddJ1)
+        kelly (if (> score-model score-market)
+                (/ (* static-amount (- (* score-model (+ 1 (double (/ oddJ2 oddJ1)))) 1) oddJ2)) 0)]
+    (response {:kelly kelly})))

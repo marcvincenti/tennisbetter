@@ -51,7 +51,7 @@
                        :value (get-in @app-state [:form-p :points1])}]]
             [:div {:class "form-group"}
               [:label {:for "odds1"} "Odds"]
-              [:input {:class "form-control" :type "number" :id "odds1"
+              [:input {:class "form-control" :type "text" :id "odds1"
                        :on-change #(swap! app-state assoc-in [:form-p :odds1]
                                   (-> % .-target .-value))
                        :value (get-in @app-state [:form-p :odds1])}]]
@@ -79,7 +79,7 @@
                        :value (get-in @app-state [:form-p :points2])}]]
             [:div {:class "form-group"}
               [:label {:for "odds2"} "Odds"]
-              [:input {:class "form-control" :type "number" :id "odds2"
+              [:input {:class "form-control" :type "text" :id "odds2"
                        :on-change #(swap! app-state assoc-in [:form-p :odds2]
                                   (-> % .-target .-value))
                        :value (get-in @app-state [:form-p :odds2])}]]
