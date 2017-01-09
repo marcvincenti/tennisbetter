@@ -76,15 +76,15 @@
        eighteen-months-ago (t/minus fdate (t/months 18))]
    (run!
      (fn [m] (cond
-       (t/within? (t/interval eighteen-months-ago twelve-months-ago) (:date m))
-        (match-inc m surface win-all-18 loose-all-18
-                             win-surface-18 loose-surface-18)
-       (t/within? (t/interval twelve-months-ago six-months-ago) (:date m))
+       (t/after? (:date m) six-months-ago)
+         (match-inc m surface win-all-6 loose-all-6
+                              win-surface-6 loose-surface-6)
+       (t/after? (:date m) twelve-months-ago)
         (match-inc m surface win-all-12 loose-all-12
                              win-surface-12 loose-surface-12)
-       (t/within? (t/interval six-months-ago fdate) (:date m))
-         (match-inc m surface win-all-6 loose-all-6
-                              win-surface-6 loose-surface-6)))
+       (t/after? (:date m) eighteen-months-ago)
+         (match-inc m surface win-all-18 loose-all-18
+                              win-surface-18 loose-surface-18)))
     matches)))
 
 (defn ^:private historical-model
@@ -131,6 +131,7 @@
                   (ratio @p2-win-surface-12months  @p2-loose-surface-12months))
       diff-s-18 (- (ratio @p1-win-surface-18months  @p1-loose-surface-18months)
                   (ratio @p2-win-surface-18months  @p2-loose-surface-18months))]
+      (prn [@p1-win-all-6months  @p1-loose-all-6months @p2-win-all-6months  @p2-loose-all-6months])
        {"Var05" diff-all-6 "Var06" diff-all-12 "Var07" diff-all-18
          "Var08" diff-s-6 "Var09" diff-s-12 "Var10" diff-s-18}))))
 
@@ -151,4 +152,6 @@
         score-market (ratio oddJ2 oddJ1)
         kelly (if (> score-model score-market)
                 (/ (* static-amount (- (* score-model (+ 1 (double (/ oddJ2 oddJ1)))) 1) oddJ2)) 0)]
+    (prn ["records" records])
+    (prn ["pred-score" score-market])
     (response {:kelly kelly})))
