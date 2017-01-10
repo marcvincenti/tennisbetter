@@ -74,6 +74,7 @@
        six-months-ago (t/minus fdate (t/months 6))
        twelve-months-ago (t/minus fdate (t/years 1))
        eighteen-months-ago (t/minus fdate (t/months 18))]
+  (prn [fdate six-months-ago twelve-months-ago eighteen-months-ago])
    (run!
      (fn [m] (cond
        (t/after? (:date m) six-months-ago)

@@ -6,7 +6,6 @@ import datetime
 import time
 import random
 import math
-import dateutil.parser as dateparser
 from itertools import islice
 
 ####################################
@@ -64,7 +63,7 @@ def save(player, stat, val, opponent, timestamp):
 def getStatHist(_player, _stat, _from, _to):
 	res = 0
 	for k,v in stats.get(_player).get('historical').items():
-		if k >= _from and k<= _to and v.get(_stat) :
+		if k > _from and k<= _to and v.get(_stat) :
 			res += v.get(_stat) 
 	return res
 	
@@ -86,15 +85,13 @@ def diff(x, y):
 
 
 def head2head(player1, player2, surface, date):
-	timestamp = dateparser.parse(date)
+	timestamp = datetime.datetime.strptime(date, "%d/%m/%Y")
 	timestamp_6month = timestamp - datetime.timedelta(6*365/12)
 	timestamp_1year = timestamp - datetime.timedelta(365)
 	timestamp_1year6month = timestamp - datetime.timedelta(18*365/12)
 	list_opp = commonOpponents(player1, player2)
 	
 	return ",".join(map(str, [
-		
-		getStatHist(player1, 'm_wins_all', timestamp_6month, timestamp), getStatHist(player1, 'm_looses_all', timestamp_6month, timestamp), getStatHist(player2, 'm_wins_all', timestamp_6month, timestamp), getStatHist(player2, 'm_looses_all', timestamp_6month, timestamp), 
 		
 		ratio(getStatOpp(player1, 'm_wins_all', list_opp), getStatOpp(player1, 'm_looses_all', list_opp)) - ratio(getStatOpp(player2, 'm_wins_all', list_opp), getStatOpp(player2, 'm_looses_all', list_opp)),
 		ratio(getStatOpp(player1, 'm_wins_'+surface, list_opp), getStatOpp(player1, 'm_looses_'+surface, list_opp)) - ratio(getStatOpp(player2, 'm_wins_'+surface, list_opp), getStatOpp(player2, 'm_looses_'+surface, list_opp)),
@@ -113,10 +110,10 @@ def head2head(player1, player2, surface, date):
 ####################################
 
 def updateStats(match):
-	_j1_name = line.get('Winner')
-	_j2_name = line.get('Loser')
+	_j1_name = match.get('Winner')
+	_j2_name = match.get('Loser')
 	_surface = match.get('Surface')
-	_timestamp = dateparser.parse(line.get('Date'))
+	_timestamp = datetime.datetime.strptime(match.get('Date'), "%d/%m/%Y")
 	
 	_sW = match.get('Wsets')
 	_sL = match.get('Lsets')
@@ -155,7 +152,7 @@ def updateStats(match):
 ###   mapping data to matchs     ###
 ####################################
 
-reader = csv.DictReader(open("men.csv", "rb"))
+reader = csv.DictReader(open("mens.csv", "rb"))
 data = list(reader)
 total_matchs_count = len(data)
 cpt = 0
