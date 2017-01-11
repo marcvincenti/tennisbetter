@@ -77,7 +77,7 @@ def getStatOpp(_player, _stat, _list_opponents):
 
 
 def diff(x, y):
-	if x != "N/A" and y  != "N/A" :
+	if x.isdigit() and y.isdigit() :
 		ret = int(x) - int(y)
 	else:
 		ret = "0"
@@ -121,9 +121,9 @@ def updateStats(match):
 	_gL = 0
 	for i in range(1,6):
 		_n = match.get('W'+str(i))
-		_gW += int(_n if _n else 0)
+		_gW += int(_n if _n.isdigit() else 0)
 		_n = match.get('L'+str(i))
-		_gL += int(_n if _n else 0)
+		_gL += int(_n if _n.isdigit() else 0)
 	
 	#totals
 	save(_j1_name, 'm_wins_all', 1, _j2_name, _timestamp)
