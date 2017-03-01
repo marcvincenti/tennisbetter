@@ -26,6 +26,7 @@ The user must haev the following access :
 ## Notes
 
 * TODO -> Crawl Bets on (at least) one website
+* REDO -> Front-end (first time using react and I don't think it is a huge success...)
 
 ## Requirements
 
