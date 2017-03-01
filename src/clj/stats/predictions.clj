@@ -150,9 +150,10 @@
         score-model (first (vals (get-in pred [:prediction :predicted-scores])))
         oddJ1 (util/str->float odds1)
         oddJ2 (util/str->float odds2)
-        score-market (ratio oddJ2 oddJ1)
+        b (- oddJ2 1)
+        q (- 1 score-model)
         kelly (if (> score-model score-market)
-                (/ (* static-amount (- (* score-model (+ 1 (double (/ oddJ2 oddJ1)))) 1) oddJ2)) 0)]
+                (/ (- (* score-model b) q) b) 0)]
     (prn ["records" records])
     (prn ["pred-score" score-market])
     (response {:kelly kelly})))
