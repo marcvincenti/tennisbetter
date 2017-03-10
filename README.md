@@ -20,12 +20,10 @@ Use environment variables :
 + ML_MODEL_ID : The model to request
 + ML_MODEL_ENDPOINT : The endpoint of your model
 
-The user must haev the following access :
-*AmazonMachineLearningRealTimePredictionOnlyAccess*
-
 ## Notes
 
-* TODO -> Crawl Bets on (at least) one website
+* Some documents are missing, if you need help contact me
+* TODO -> Crawl live Bets on (at least) one website
 * REDO -> Front-end (first time using react and I don't think it is a huge success...)
 
 ## Requirements
